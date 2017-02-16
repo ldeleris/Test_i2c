@@ -33,6 +33,10 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32l4xx_hal.h"
+#include <string.h>
+#include "Adafruit_SSD1306.h"
+#include "images.h"
+#include "test.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -44,7 +48,6 @@ I2C_HandleTypeDef hi2c3;
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
 
-uint16_t address = 0x3C << 1;
 // the memory buffer for the LCD
 
 static char buffer[128 * 64 / 8] = {
@@ -153,7 +156,12 @@ int main(void)
   LED_Init();
 
   /* USER CODE BEGIN 2 */
-  LCD_Init();
+  //LCD_Init();
+  Adafruit_SSD1306 lcd(&hi2c3, (int8_t)0);
+  Test test(&lcd);
+
+  lcd.begin();
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -166,45 +174,59 @@ int main(void)
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
-	  if (HAL_I2C_IsDeviceReady(&hi2c3, (uint16_t) address, 3, 1000) == HAL_OK)
+	  if (HAL_I2C_IsDeviceReady(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, 3, 1000) == HAL_OK)
 	  {
 		  LED_On();
-		  LCD_dim(0);
+		  //LCD_dim(0);
 		  //i = (~i) & 0x01;
 		  if (j == 0)
 		  {
-			  LCD_display();
+			  lcd.stopscroll();
+			  lcd.display();
 			  //LCD_startscrollright(0x00, 0x0F);
+			  HAL_Delay(1000);
 		  }
+		  else if (j == 1)
+		  {
+			  lcd.clearDisplay();
+			  lcd.setTextSize(2);
+			  lcd.setTextColor(BLACK, WHITE);
+			  lcd.setCursor(0,0);
+			  lcd.println("Test Oled:");
+			  lcd.setTextSize(1);
+			  lcd.setTextColor(WHITE, BLACK);
+			  lcd.print("Address  : ");
+			  lcd.print("0x");
+			  lcd.println(SSD1306_I2C_ADDRESS, HEX);
+			  lcd.print("Version: ");
+			  char line[40];
+			  int version = HAL_GetHalVersion();
+			  sprintf(line,"%d.%d.%d",(version >> 24) & 0xFF, (version >> 16) & 0xFF, (version >> 8 ) & 0xFF);
+			  lcd.println(line);
+			  lcd.display();
+			  HAL_Delay(1000);
+		  }
+		  else if (j == 2)
+		  {
+			  lcd.clearDisplay();
+			  lcd.drawXBitmap(20, 0, me_bits, me_width, me_height, WHITE);
+			  lcd.display();
+			  HAL_Delay(1000);
+		  }
+		  else
+		  {
+			  test.loop();
+		  }
+
 		  j++;
+
 	  }
 	  else
 	  {
 		  LED_Off();
 	  }
 
-	  if (j == 1)
-	  {
-		  LCD_clearDisplay();
-		  //int y = 20;
-		  for (int x=20;x<100;x++)
-		  {
-			  for (int y=20; y<40; y++)
-			  {
-				  LCD_drawPixel(x,y,WHITE);
-			  }
-
-
-		  }
-		  i++;
-
-		  j = 0;
-	  }
-
-
 	  HAL_Delay(20);
-
-
   }
   /* USER CODE END 3 */
 
@@ -225,13 +247,13 @@ void LCD_display(void)
   {
 	  temp[i] = data[i];
   }
-  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) temp, 7, 1000);
+  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) temp, 7, 1000);
   temp[0] = 0x40;
   for (int i=1; i<(128*64/8); i++)
   {
    	temp[i] = buffer[i];
   }
-  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) temp, 128*64/8, 1000);
+  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) temp, 128*64/8, 1000);
 
 /*
   for (int i=0; i<(128*64/8); i++)
@@ -293,7 +315,7 @@ void LCD_Invert(char i)
 	char data[2] = {0x00, 0x00};
 	data[1] = i==1?0xA7:0xA6;
 
-	HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) data, 2, 1000);
+	HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) data, 2, 1000);
 }
 
 void LCD_Init(void)
@@ -311,7 +333,7 @@ void LCD_Init(void)
 	  for (int i=0; i<26; i++)
 	  {
 		  temp[1] = data[i];
-		  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) temp, 2, 1000);
+		  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) temp, 2, 1000);
 	  }
 }
 
@@ -332,7 +354,7 @@ void LCD_dim(char dim)
 	}
 	// the range of contrast to too small to be really useful
 	// it is useful to dim the display
-	HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) temp, 3, 1000);
+	HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) temp, 3, 1000);
 }
 
 // startscrollright
@@ -346,7 +368,7 @@ void LCD_startscrollright(char start, char stop)
 	for (int i=0; i<8; i++)
 	{
 	  temp[1] = data[i];
-	  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) temp, 2, 1000);
+	  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) temp, 2, 1000);
 	}
 }
 
@@ -361,7 +383,7 @@ void LCD_startscrollleft(char start, char stop)
 	for (int i=0; i<8; i++)
 	{
 	  temp[1] = data[i];
-	  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) address, (uint8_t *) temp, 2, 1000);
+	  HAL_I2C_Master_Transmit(&hi2c3, (uint16_t) SSD1306_I2C_ADDRESS << 1, (uint8_t *) temp, 2, 1000);
 	}
 }
 

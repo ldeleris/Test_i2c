@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>Test_i2c</name>
-	<comment />
+	<comment></comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -23,8 +23,18 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 		<nature>fr.ac6.mcu.ide.core.MCUProjectNature</nature>
+		<nature>org.eclipse.cdt.core.ccnature</nature>
 	</natures>
 	<linkedResources>
-		
+		<link>
+			<name>Drivers/Adafruit-GFX</name>
+			<type>2</type>
+			<location>C:/Users/Laurent/Documents/GitHub/Adafruit-GFX-Library</location>
+		</link>
+		<link>
+			<name>Drivers/Adafruit_SSD1306</name>
+			<type>2</type>
+			<location>C:/Users/Laurent/Documents/GitHub/Adafruit_SSD1306</location>
+		</link>
 	</linkedResources>
 </projectDescription>
