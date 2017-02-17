@@ -1,4 +1,9 @@
 /*
+***************************************************************************
+Adaptation de la classe interface Printable pour STM32L4xx_HAL.
+author: Laurent Deleris.
+Copyright (c) 2017 Laurent Deleris. All rights reserved.
+***************************************************************************
   Printable.h - Interface class that allows printing of complex types
   Copyright (c) 2011 Adrian McEwen.  All right reserved.
   This library is free software; you can redistribute it and/or

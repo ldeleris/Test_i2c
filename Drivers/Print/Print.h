@@ -1,4 +1,9 @@
 /*
+***************************************************************************
+Adaptation de la bibliothéque Print pour STM32L4xx_HAL.
+author: Laurent Deleris.
+Copyright (c) 2017 Laurent Deleris. All rights reserved.
+***************************************************************************
   Print.h - Base class that provides print() and println()
   Copyright (c) 2008 David A. Mellis.  All right reserved.
   This library is free software; you can redistribute it and/or

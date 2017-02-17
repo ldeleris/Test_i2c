@@ -62,16 +62,7 @@
 
 #define LCD_swap(a, b) { int t = a; a = b; b = t; }
 /* USER CODE END Private defines */
-void LCD_Init(void);
 
-void LCD_Invert(char i);
-void LCD_display(void);
-void LED_Init(void);
-void LCD_startscrollleft(char start, char stop);
-void LCD_startscrollright(char start, char stop);
-void LCD_dim(char dim);
-void LCD_clearDisplay(void) ;
-void LCD_drawPixel(int x, int y, int color) ;
 
 void LED_On(void);
 void LED_Off(void);

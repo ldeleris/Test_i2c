@@ -39,7 +39,9 @@ void Test::loop(void)
 {
   // Clear the buffer.
   ptrLcd->clearDisplay();
-
+  //ptrLcd->affiche_logo();
+  //ptrLcd->display();
+  //HAL_Delay(10000);
   // draw a single pixel
   ptrLcd->drawPixel(10, 10, WHITE);
   // Show the display buffer on the hardware.
@@ -151,7 +153,7 @@ void Test::testdrawbitmap(void)
   {
     icons[f][XPOS] = rand() % ptrLcd->width();
     icons[f][YPOS] = 0;
-    icons[f][DELTAY] = (rand() % 5) + 1;
+    icons[f][DELTAY] = (rand() % 20) + 1;
   }
 
   while (1) {
@@ -161,7 +163,7 @@ void Test::testdrawbitmap(void)
     			logo16_glcd_bmp, LOGO16_GLCD_WIDTH, LOGO16_GLCD_HEIGHT, WHITE);
     }
     ptrLcd->display();
-    HAL_Delay(200);
+    HAL_Delay(5);
 
     // then erase it + move it
     for (uint8_t f=0; f< NUMFLAKES; f++) {
@@ -173,7 +175,7 @@ void Test::testdrawbitmap(void)
       if (icons[f][YPOS] > ptrLcd->height()) {
         icons[f][XPOS] = rand() % ptrLcd->width();
         icons[f][YPOS] = 0;
-        icons[f][DELTAY] = (rand() % 5) + 1;
+        icons[f][DELTAY] = (rand() % 20) + 1;
       }
     }
    }
