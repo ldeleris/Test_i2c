@@ -117,16 +117,16 @@ int main(void)
 		  {
 			  lcd.clearDisplay();
 			  lcd.setTextSize(2);
-			  lcd.setTextColor(BLACK, WHITE);
-			  lcd.setCursor(0,0);
+			  lcd.setTextColor(WHITE, BLACK);
+			  lcd.setCursor(0,7);
 			  lcd.println("Test Oled:");
 			  lcd.setTextSize(1);
 			  lcd.setTextColor(WHITE, BLACK);
 			  lcd.print("Address  : ");
 			  lcd.print("0x");
 			  lcd.println(SSD1306_I2C_ADDRESS, HEX);
-			  lcd.setTextSize(2);
-			  lcd.setTextColor(BLACK, WHITE);
+			  lcd.setTextSize(1);
+			  lcd.setTextColor(WHITE, BLACK);
 			  lcd.println("VERSION");
 			  lcd.setTextSize(1);
 			  lcd.setTextColor(WHITE, BLACK);

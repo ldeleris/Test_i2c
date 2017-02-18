@@ -36,5 +36,10 @@
 			<type>2</type>
 			<location>C:/Users/Laurent/Documents/GitHub/Adafruit_SSD1306</location>
 		</link>
+		<link>
+			<name>Drivers/Print</name>
+			<type>2</type>
+			<location>C:/Users/Laurent/Documents/GitHub/Print</location>
+		</link>
 	</linkedResources>
 </projectDescription>
